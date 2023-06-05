@@ -36,7 +36,278 @@
             background-color: #4CAF50;
             color: #fff;
             border: none;
+            cursor: pointer;<!DOCTYPE html>
+<html>
+<head>
+    <title>Miko Morse Code Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: none;
+            padding: 5px;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
             cursor: pointer;
+        }
+
+        table {
+            margin-bottom: 10px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 5px;
+        }
+
+        table.resultTable {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        table.resultTable th,
+        table.resultTable td {
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        table.resultTable th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        table.scrollTable {
+            border: 1px solid black;
+            width: 100%;
+            height: 100px;
+            overflow: auto;
+            margin-bottom: 10px;
+        }
+
+        table.scrollTable th,
+        table.scrollTable td {
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        table.scrollTable th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        @media only screen and (max-width: 600px) {
+            h2 {
+                font-size: 24px;
+            }
+
+            textarea {
+                height: 80px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Morse Code Converter</h2>
+
+    <label for="text">Result:</label>
+    <textarea id="text" rows="4" cols="50"></textarea>
+
+    <button onclick="encode()">Encode</button>
+    <button onclick="decode()">Decode</button>
+
+    <h3>Result</h3>
+    <table id="copyTable" class="scrollTable">
+        <tr>
+            <th>Morse Code</th>
+        </tr>
+    </table>
+
+    <table id="resultTable" class="resultTable">
+        <tr>
+            <th>Character</th>
+            <th>Code</th>
+        </tr>
+    </table>
+
+    <script>
+        // Tabel untuk menampilkan hasil
+        const resultTable = document.getElementById("resultTable");
+        const copyTable = document.getElementById("copyTable");
+
+        // Daftar karakter Morse
+        const morseCodes = {
+            A: ".-",
+            B: "-...",
+            C: "-.-.",
+            D: "-..",
+            E: ".",
+            F: "..-.",
+            G: "--.",
+            H: "....",
+            I: "..",
+            J: ".---",
+            K: "-.-",
+            L: ".-..",
+            M: "--",
+            N: "-.",
+            O: "---",
+            P: ".--.",
+            Q: "--.-",
+            R: ".-.",
+            S: "...",
+            T: "-",
+            U: "..-",
+            V: "...-",
+            W: ".--",
+            X: "-..-",
+            Y: "-.--",
+            Z: "--..",
+            "0": "-----",
+            "1": ".----",
+            "2": "..---",
+            "3": "...--",
+            "4": "....-",
+            "5": ".....",
+            "6": "-....",
+            "7": "--...",
+            "8": "---..",
+            "9": "----.",
+            ".": ".-.-.-",
+            ",": "--..--",
+            "?": "..--..",
+            "'": ".----.",
+            "!": "-.-.--",
+            "/": "-..-.",
+            "(": "-.--.",
+            ")": "-.--.-",
+            "&": ".-...",
+            ":": "---...",
+            ";": "-.-.-.",
+            "=": "-...-",
+            "+": ".-.-.",
+            "-": "-....-",
+            "_": "..--.-",
+            "\"": ".-..-.",
+            "$": "...-..-",
+            "@": ".--.-.",
+            " ": "/"
+        };
+
+        // Fungsi untuk mengencode teks menjadi Morse
+        function encode() {
+            const textInput = document.getElementById("text").value.toUpperCase();
+            clearTable(resultTable);
+            clearTable(copyTable);
+
+            let rowCount = 0;
+
+            for (let i = 0; i < textInput.length; i++) {
+                const character = textInput[i];
+                const morseCode = morseCodes[character];
+
+                if (morseCode) {
+                    addRow(resultTable, character, morseCode);
+                    addRow(copyTable, morseCode);
+                    rowCount++;
+                }
+            }
+
+            // Tombol "Copy"
+            const copyButton = document.createElement("button");
+            copyButton.innerText = "Copy";
+            copyButton.onclick = function() {
+                const copyText = Array.from(copyTable.querySelectorAll("td")).map(td => td.innerText).join("");
+                navigator.clipboard.writeText(copyText);
+                alert("Text copied to clipboard!");
+            };
+            copyTable.appendChild(copyButton);
+        }
+
+        // Fungsi untuk mendecode Morse menjadi teks
+        function decode() {
+            const textInput = document.getElementById("text").value.trim().split(" ");
+            clearTable(resultTable);
+            clearTable(copyTable);
+
+            let rowCount = 0;
+
+            for (let i = 0; i < textInput.length; i++) {
+                const morseCode = textInput[i];
+
+                for (const character in morseCodes) {
+                    if (morseCodes.hasOwnProperty(character) && morseCodes[character] === morseCode) {
+                        addRow(resultTable, character, morseCode);
+                        addRow(copyTable, character);
+                        rowCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Tombol "Copy"
+            const copyButton = document.createElement("button");
+            copyButton.innerText = "Copy";
+            copyButton.onclick = function() {
+                const copyText = Array.from(copyTable.querySelectorAll("td")).map(td => td.innerText).join("");
+                navigator.clipboard.writeText(copyText);
+                alert("Text copied to clipboard!");
+            };
+            copyTable.appendChild(copyButton);
+        }
+
+        // Fungsi untuk menambahkan baris ke dalam tabel hasil
+        function addRow(table, character, code) {
+            const row = table.insertRow();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            cell1.innerHTML = character;
+            cell2.innerHTML = code;
+        }
+
+        // Fungsi untuk menghapus semua baris dari tabel hasil
+        function clearTable(table) {
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+        }
+    </script>
+</body>
+</html>
+
         }
 
         table {
