@@ -36,7 +36,235 @@
             background-color: #4CAF50;
             color: #fff;
             border: none;
-            cursor: pointer;<!DOCTYPE html>
+            cursor: pointer;<!DOCTYPE html><!DOCTYPE html>
+<html>
+<head>
+    <title>Miko Morse Code Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: none;
+            padding: 5px;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            margin-bottom: 10px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        @media only screen and (max-width: 600px) {
+            h2 {
+                font-size: 24px;
+            }
+
+            textarea {
+                height: 80px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Morse Code Converter</h2>
+
+    <label for="text">Result:</label>
+    <textarea id="text" rows="4" cols="50"></textarea>
+
+    <button onclick="encode()">Encode</button>
+    <button onclick="decode()">Decode</button>
+
+    <h3>Result</h3>
+    <table id="resultTable">
+        <tr>
+            <th>Character</th>
+            <th>Code</th>
+        </tr>
+    </table>
+
+    <script>
+        // Tabel untuk menampilkan hasil
+        const resultTable = document.getElementById("resultTable");
+
+        // Daftar karakter Morse
+        const morseCodes = {
+            A: ".-",
+            B: "-...",
+            C: "-.-.",
+            D: "-..",
+            E: ".",
+            F: "..-.",
+            G: "--.",
+            H: "....",
+            I: "..",
+            J: ".---",
+            K: "-.-",
+            L: ".-..",
+            M: "--",
+            N: "-.",
+            O: "---",
+            P: ".--.",
+            Q: "--.-",
+            R: ".-.",
+            S: "...",
+            T: "-",
+            U: "..-",
+            V: "...-",
+            W: ".--",
+            X: "-..-",
+            Y: "-.--",
+            Z: "--..",
+            "0": "-----",
+            "1": ".----",
+            "2": "..---",
+            "3": "...--",
+            "4": "....-",
+            "5": ".....",
+            "6": "-....",
+            "7": "--...",
+            "8": "---..",
+            "9": "----.",
+            ".": ".-.-.-",
+            ",": "--..--",
+            "?": "..--..",
+            "'": ".----.",
+            "!": "-.-.--",
+            "/": "-..-.",
+            "(": "-.--.",
+            ")": "-.--.-",
+            "&": ".-...",
+            ":": "---...",
+            ";": "-.-.-.",
+            "=": "-...-",
+            "+": ".-.-.",
+            "-": "-....-",
+            "_": "..--.-",
+            "\"": ".-..-.",
+            "$": "...-..-",
+            "@": ".--.-.",
+            " ": "/"
+        };
+
+        // Fungsi untuk mengencode teks menjadi Morse
+        function encode() {
+            const textInput = document.getElementById("text").value.toUpperCase();
+            clearTable(resultTable);
+
+            let rowCount = 0;
+            let colCount = 0;
+
+            for (let i = 0; i < textInput.length; i++) {
+                const character = textInput[i];
+                const morseCode = morseCodes[character];
+
+                if (morseCode) {
+                    addRow(resultTable, character, morseCode, rowCount, colCount);
+
+                    rowCount++;
+                    if (rowCount >= 12) {
+                        rowCount = 0;
+                        colCount++;
+                    }
+                }
+            }
+        }
+
+        // Fungsi untuk mendecode Morse menjadi teks
+        function decode() {
+            const textInput = document.getElementById("text").value.trim().split(" ");
+            clearTable(resultTable);
+
+            let rowCount = 0;
+            let colCount = 0;
+
+            for (let i = 0; i < textInput.length; i++) {
+                const morseCode = textInput[i];
+
+                for (const character in morseCodes) {
+                    if (morseCodes.hasOwnProperty(character) && morseCodes[character] === morseCode) {
+                        addRow(resultTable, character, morseCode, rowCount, colCount);
+
+                        rowCount++;
+                        if (rowCount >= 12) {
+                            rowCount = 0;
+                            colCount++;
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Fungsi untuk menambahkan baris ke dalam tabel
+        function addRow(table, character, code, row, col) {
+            let rowIndex = row + 1;
+            let colIndex = col * 2;
+
+            let rowElement = table.rows[rowIndex];
+
+            if (!rowElement) {
+                rowElement = table.insertRow(rowIndex);
+            }
+
+            const cell1 = rowElement.insertCell(colIndex);
+            const cell2 = rowElement.insertCell(colIndex + 1);
+            cell1.innerHTML = character;
+            cell2.innerHTML = code;
+        }
+
+        // Fungsi untuk menghapus semua baris dari tabel
+        function clearTable(table) {
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+        }
+    </script>
+</body>
+</html>
+
 <html>
 <head>
     <title>Miko Morse Code Converter</title>
